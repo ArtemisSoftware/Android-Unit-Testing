@@ -1,4 +1,4 @@
-package com.titan.androidunittesting;
+package com.titan.androidunittesting.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
