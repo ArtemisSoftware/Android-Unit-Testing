@@ -27,11 +27,48 @@ public class NoteRepositoryTest {
         noteRepository = new NoteRepository(noteDao);
     }
 
-    @Test
-    void dummyTest() throws Exception {
 
-        Assertions.assertNotNull(noteDao);
-        Assertions.assertNotNull(noteRepository);
+    /**
+     * Insert note
+     * Verify the correct method is called
+     * Confirm observer is triggered
+     * Confirm new rows inserted
+     */
+    @Test
+    void insertNote_returnRow() throws Exception {
+
+        //Arrange
+
+        //Act
+
+        //Assert
+
+    }
+
+
+    /**
+     * Insert note
+     * Failure (return -1)
+     */
+    @Test
+    void insertNote_returnFailure() throws Exception {
+
+        //Arrange
+
+        //Act
+
+        //Assert
+
+    }
+
+
+    /**
+     * Insert note
+     * Null title
+     * confirm throw exception
+     */
+    @Test
+    void insertNote_nullTitle_throwException() throws Exception {
 
         //Arrange
 
