@@ -125,4 +125,77 @@ public class NoteRepositoryTest {
         assertEquals(NoteRepository.NOTE_TITLE_NULL, exception.getMessage());
 
     }
+
+    /**
+     * Update note
+     * verify correct method is called
+     * confirm observer is trigger
+     * confirm number of rows updated
+     */
+    @Test
+    void updateNote_returnNumRowsUpdated() throws Exception {
+
+        //Arrange
+        final int updatedRow = 1;
+
+        when(noteDao.updateNote(any(Note.class))).thenReturn(Single.just(updatedRow));
+
+        //Act
+
+        final Resource<Integer> returnedValue = noteRepository.updateNote(NOTE1).blockingFirst();
+
+        //Assert
+        verify(noteDao).updateNote(any(Note.class));
+        verifyNoMoreInteractions(noteDao);
+
+        assertEquals(Resource.success(updatedRow, NoteRepository.UPDATE_SUCCESS), returnedValue);
+
+    }
+
+    /**
+     * Update note
+     * Failure (-1)
+     */
+    @Test
+    void updateNote_returnFailure() throws Exception {
+
+        //Arrange
+        final int failedInsert = -1;
+        final Single<Integer> returnedData = Single.just(failedInsert);
+        when(noteDao.updateNote(any(Note.class))).thenReturn(returnedData);
+
+        //Act
+
+        final Resource<Integer> returnedValue = noteRepository.updateNote(NOTE1).blockingFirst();
+
+        //Assert
+        verify(noteDao).updateNote(any(Note.class));
+        verifyNoMoreInteractions(noteDao);
+
+        assertEquals(Resource.error(null, NoteRepository.UPDATE_FAILURE), returnedValue);
+
+    }
+
+    /**
+     * Update note
+     * null title
+     * throw exception
+     */
+    @Test
+    void updateNote_nullTitle_throwException() throws Exception {
+
+        Exception exception = assertThrows(Exception.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                final Note note = new Note(TestUtil.TEST_NOTE_1);
+                note.setTitle(null);
+                noteRepository.updateNote(note);
+            }
+        });
+
+        assertEquals(NoteRepository.NOTE_TITLE_NULL, exception.getMessage());
+    }
+
+
+
 }
