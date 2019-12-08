@@ -8,25 +8,55 @@ import androidx.lifecycle.ViewModel;
 import com.titan.androidunittesting.models.Note;
 import com.titan.androidunittesting.repository.NoteRepository;
 import com.titan.androidunittesting.ui.Resource;
+import com.titan.androidunittesting.util.DateUtil;
 
 import javax.inject.Inject;
 
+import static com.titan.androidunittesting.repository.NoteRepository.NOTE_TITLE_NULL;
+
 public class NoteViewModel extends ViewModel {
 
-    //inject
+    private static final String TAG = "NoteViewModel";
+    public static final String NO_CONTENT_ERROR = "Can't save note with no content";
+
+    public enum ViewState {VIEW, EDIT}
+
+    // inject
     private final NoteRepository noteRepository;
 
-    private MutableLiveData<Note> note = new MutableLiveData<>();
+    // vars
+    private MutableLiveData<Note> note  = new MutableLiveData<>();
+    private MutableLiveData<ViewState> viewState = new MutableLiveData<>();
+    private boolean isNewNote;
 
 
     @Inject
-    public NoteViewModel(NoteRepository noteRepository){
+    public NoteViewModel(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
     }
+
 
     public LiveData<Note> observeNote(){
         return note;
     }
+
+    public LiveData<ViewState> observeViewState(){
+        return viewState;
+    }
+
+    public void setViewState(ViewState viewState){
+        this.viewState.setValue(viewState);
+    }
+
+    public void setIsNewNote(boolean isNewNote){
+        this.isNewNote = isNewNote;
+    }
+
+    public LiveData<Resource<Integer>> saveNote() throws Exception{
+
+        return null;
+    }
+
 
     public LiveData<Resource<Integer>> insertNote() throws Exception{
         return LiveDataReactiveStreams.fromPublisher(
@@ -34,14 +64,51 @@ public class NoteViewModel extends ViewModel {
         );
     }
 
+    public LiveData<Resource<Integer>> updateNote() throws Exception{
+        return LiveDataReactiveStreams.fromPublisher(
+                noteRepository.updateNote(note.getValue())
+        );
+    }
 
+
+    public void updateNote(String title, String content) throws Exception{
+        if(title == null || title.equals("")){
+            throw new NullPointerException("Title can't be null");
+        }
+        String temp = removeWhiteSpace(content);
+        if(temp.length() > 0){
+            Note updatedNote = new Note(note.getValue());
+            updatedNote.setTitle(title);
+            updatedNote.setContent(content);
+            updatedNote.setTimestamp(DateUtil.getCurrentTimeStamp());
+
+            note.setValue(updatedNote);
+        }
+    }
+
+    private String removeWhiteSpace(String string){
+        string = string.replace("\n", "");
+        string = string.replace(" ", "");
+        return string;
+    }
 
     public void setNote(Note note) throws Exception{
-
         if(note.getTitle() == null || note.getTitle().equals("")){
-            throw new Exception(NoteRepository.NOTE_TITLE_NULL);
+            throw new Exception(NOTE_TITLE_NULL);
         }
-
         this.note.setValue(note);
     }
+
+    public boolean shouldNavigateBack(){
+        if(viewState.getValue() == ViewState.VIEW){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }
+
+
+

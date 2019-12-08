@@ -1,11 +1,14 @@
-package com.titan.androidunittesting;
+package com.titan.androidunittesting.ui.noteslist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.titan.androidunittesting.R;
 import com.titan.androidunittesting.repository.NoteRepository;
+import com.titan.androidunittesting.ui.note.NoteActivity;
 
 import javax.inject.Inject;
 
@@ -15,14 +18,17 @@ public class NotesListActivity extends DaggerAppCompatActivity {
 
     private static final String TAG = "NotesListActivity";
 
-    @Inject
-    NoteRepository noteRepository;
+    //@Inject
+    //NoteRepository noteRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes_list);
 
-        Log.d(TAG, "onCreate: " + noteRepository);
+        //Log.d(TAG, "onCreate: " + noteRepository);
+
+        Intent intent = new Intent(this, NoteActivity.class);
+        startActivity(intent);
     }
 }
