@@ -4,11 +4,13 @@ import com.titan.androidunittesting.models.Note;
 import com.titan.androidunittesting.persistence.NoteDao;
 import com.titan.androidunittesting.repository.NoteRepository;
 import com.titan.androidunittesting.ui.Resource;
+import com.titan.androidunittesting.util.InstantExecutorExtension;
 import com.titan.androidunittesting.util.LiveDataTestUtil;
 import com.titan.androidunittesting.util.TestUtil;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(InstantExecutorExtension.class)
 public class NoteViewModelTest {
 
     //system under test
