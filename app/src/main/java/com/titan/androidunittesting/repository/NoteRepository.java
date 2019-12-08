@@ -46,6 +46,7 @@ public class NoteRepository {
         checkTitle(note);
         
         return noteDao.insertNote(note)
+                //for testing
                 .delaySubscription(timeDelay, timeUnit)
                 .map(new Function<Long, Integer>() {
                     @Override
@@ -73,6 +74,34 @@ public class NoteRepository {
                 .subscribeOn(Schedulers.io())
                 .toFlowable();
     }
+
+    public Flowable<Resource<Integer>> updateNote(final Note note) throws Exception{
+
+        checkTitle(note);
+
+        return noteDao.updateNote(note)
+                //for testing
+                .delaySubscription(timeDelay, timeUnit)
+                .onErrorReturn(new Function<Throwable, Integer>() {
+                    @Override
+                    public Integer apply(Throwable throwable) throws Exception {
+                        return -1;
+                    }
+                })
+                .map(new Function<Integer, Resource<Integer>>() {
+
+                    @Override
+                    public Resource<Integer> apply(Integer integer) throws Exception {
+                        if(integer > 0){
+                            return Resource.success(integer, UPDATE_SUCCESS);
+                        }
+                        return Resource.error(null, UPDATE_FAILURE);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .toFlowable();
+    }
+
 
     private void checkTitle(Note note) throws  Exception{
 
