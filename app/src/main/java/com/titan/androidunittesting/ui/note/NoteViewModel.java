@@ -116,6 +116,18 @@ public class NoteViewModel extends ViewModel {
         );
     }
 
+    public LiveData<Resource<Integer>> updateNote() throws Exception{
+        return LiveDataReactiveStreams.fromPublisher(
+                noteRepository.updateNote(note.getValue())
+                        .doOnSubscribe(new Consumer<Subscription>() {
+                            @Override
+                            public void accept(Subscription subscription) throws Exception {
+                                updateSubscription = subscription;
+                            }
+                        })
+        );
+    }
+
 
     private void cancelPendingTransactions(){
         if(insertSubscription != null){
@@ -141,17 +153,7 @@ public class NoteViewModel extends ViewModel {
         return removeWhiteSpace(note.getValue().getContent()).length() > 0;
     }
 
-    public LiveData<Resource<Integer>> updateNote() throws Exception{
-        return LiveDataReactiveStreams.fromPublisher(
-                noteRepository.updateNote(note.getValue())
-                .doOnSubscribe(new Consumer<Subscription>() {
-                    @Override
-                    public void accept(Subscription subscription) throws Exception {
-                        updateSubscription = subscription;
-                    }
-                })
-        );
-    }
+
 
 
     public void updateNote(String title, String content) throws Exception{

@@ -157,4 +157,47 @@ public class NoteViewModelTest {
 
     }
 
+
+
+    /**
+     * Update a new note and observe row returned
+     * @throws Exception
+     */
+    @Test
+    void updateNote_returnRow() throws Exception {
+
+        // Arrange
+        Note note = new Note(TestUtil.TEST_NOTE_1);
+        LiveDataTestUtil<Resource<Integer>> liveDataTestUtil = new LiveDataTestUtil<>();
+        final int updatedRow = 1;
+
+        Flowable<Resource<Integer>> returnedData = SingleToFlowable.just(Resource.success(updatedRow, NoteRepository.UPDATE_SUCCESS));
+        Mockito.when(noteRepository.updateNote(any(Note.class))).thenReturn(returnedData);
+
+        // Act
+
+        noteViewModel.setNote(note);
+        Resource<Integer> returnedValue = liveDataTestUtil.getValue(noteViewModel.updateNote());
+
+        // Assert
+
+        assertEquals(Resource.success(updatedRow, NoteRepository.UPDATE_SUCCESS), returnedValue);
+    }
+
+    /**
+     * Update: dont return a new row without observer
+     */
+    @Test
+    void dontReturnUpdateRowNumWithoutObserver() throws Exception {
+
+        // Arrange
+        Note note = new Note(TestUtil.TEST_NOTE_1);
+
+
+        // Act
+        noteViewModel.setNote(note);
+
+        // Assert
+        verify(noteRepository, never()).updateNote(any(Note.class));
+    }
 }
