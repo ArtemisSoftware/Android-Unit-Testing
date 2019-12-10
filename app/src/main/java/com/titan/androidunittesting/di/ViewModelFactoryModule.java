@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.titan.androidunittesting.ui.note.NoteViewModel;
+import com.titan.androidunittesting.ui.noteslist.NotesListViewModel;
 import com.titan.androidunittesting.viewmodels.ViewModelProviderFactory;
 
 import dagger.Binds;
@@ -20,5 +21,10 @@ public abstract class ViewModelFactoryModule {
     @IntoMap
     @ViewModelKey(NoteViewModel.class)
     public abstract ViewModel bindNoteViewModel(NoteViewModel noteViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NotesListViewModel.class)
+    public abstract ViewModel bindNotesListViewModel(NotesListViewModel notesListViewModel);
 
 }
