@@ -11,6 +11,8 @@ import com.titan.androidunittesting.ui.Resource;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class NotesListViewModel extends ViewModel {
 
     private static final String TAG = "NotesListViewModel";
@@ -20,6 +22,7 @@ public class NotesListViewModel extends ViewModel {
 
     private MediatorLiveData<List<Note>> notes = new MediatorLiveData<>();
 
+    @Inject
     public NotesListViewModel(NoteRepository noteRepository){
         this.noteRepository = noteRepository;
     }
