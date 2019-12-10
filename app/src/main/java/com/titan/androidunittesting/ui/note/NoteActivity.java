@@ -156,7 +156,7 @@ public class NoteActivity extends DaggerAppCompatActivity implements
                             switch (integerResource.status){
 
                                 case SUCCESS:{
-                                    Log.e(TAG, "onChanged: save note: success..." );
+                                    Log.d(TAG, "onChanged: save note: success..." );
                                     showSnackBar(integerResource.message);
                                     break;
                                 }
@@ -168,7 +168,7 @@ public class NoteActivity extends DaggerAppCompatActivity implements
                                 }
 
                                 case LOADING:{
-                                    Log.e(TAG, "onChanged: save note: loading..." );
+                                    Log.d(TAG, "onChanged: save note: loading..." );
                                     break;
                                 }
                             }
